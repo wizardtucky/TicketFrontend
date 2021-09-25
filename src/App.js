@@ -1,17 +1,42 @@
 import './App.css';
-import User from './components/Users/User';
-import Ticket from './components/Tickets/Tickets'
-import { Store } from './Store/Store';
+import { Store, useStore } from './Store/Store';
+import LoginRegisterModal from './components/LoginRegisterModal/LoginRegisterModal';
+import { BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
-function App() {  
+//Pages
+import MainPage from './Pages';
+import NotFoundPage from './Pages/404';
+import UsersPage from './Pages/usersPage';
+import Navbar from './components/NavBar';
+//Image
+
+function AppContent() {
+  const store = useStore()
+
+  console.log(store.state)
+
   return (
-    <Store>
+    <>
+      <Navbar />
       <div className="App">
-        <User />
-        <Ticket />
+        <Switch>
+          <Route exact path="/" component={MainPage} />
+          <Route exact path="/user" component={UsersPage} />
+          <Route exact path="/404" component={NotFoundPage} />
+          <Redirect to="/404"/>
+        </Switch>
       </div>
-    </Store>
+      {store.state.isLoginModalOpen && <LoginRegisterModal />}
+    </>
   );
 }
+
+const App = (props) => (
+  <Store>
+    <Router>
+      <AppContent />
+    </Router>
+  </Store>
+)
 
 export default App;

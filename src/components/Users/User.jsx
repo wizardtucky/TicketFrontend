@@ -3,11 +3,13 @@ import { useStore } from '../../Store/Store';
 
 const User = () => {
     const store = useStore()
+
+    const users = store.state.users.filter((u) => u.userRole !== "ADMIN")
     
     return (
         <>
         <h1>Pick Person To Visit</h1>
-        {store.state.users.map((user) => 
+        {users.map((user) => 
             // <button className='btn'>{user.name}</button>
             <Button
                 key={user.id}

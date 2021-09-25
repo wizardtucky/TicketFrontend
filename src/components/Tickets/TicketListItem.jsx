@@ -1,30 +1,29 @@
-import Button from '../Button'
-import { useStore } from '../../Store/Store';
 
-const TicketListItem = ({ item }) => {
+const leadingZero = (value) => (
+  value < 10 ? `0${value}` : `${value}`
+)
 
-  const store = useStore()
+const formatTime = (time) => {
+  const date = new Date(time)
+  const formatedDate = `${date.getFullYear()}-${leadingZero(date.getMonth())}-${leadingZero(date.getDay())}`
+  const formatedTime = `${date.getHours()}:${leadingZero(date.getMinutes())}:${leadingZero(date.getSeconds())}`
 
-    const onClick = () => {
-      store.actions.deleteTicket(item.id)
-      console.log(item)
-    }
+  return `${formatedDate} ${formatedTime}`
+}
 
+const TicketListItem = ({ item, children }) => {
   return (
-    <div className='list-item'>
-      <div>{item.id}</div>
-      <div style={{color: "blue", margin: "screenLeft" }}>{item.time}</div>
-       <div>{item.user.name}</div>
-
-      <Button color='silver' text='Delete but' onClick={onClick}/>
+    <div className='ticket-list-item'>
+      <div className='ticket-list-item-index'>{item.id}</div>
+      <div className='ticket-list-item-name'>{item.user.name}</div>
+      <div
+        className={`ticket-list-status ${!item.isActive ? 'ticket-list-status-active' : ''}`}
+      >
+        {item.isActive ? "Waiting" : "Processing"}
+      </div>
+      <div>{children ? children : formatTime(item.time)}</div>
     </div>
   )
 }
-
-// CSS in JS
-// const headingStyle = {
-//   color: 'red',
-//   backgroundColor: 'black',
-// }
 
 export default TicketListItem
